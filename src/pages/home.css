@@ -1,0 +1,125 @@
+/* home.css */
+
+.inner-box {
+  position: relative;
+  padding-left: 13%;
+  padding-right: 15%;
+
+  padding-top: 3%;
+}
+
+.inner-box-1 {
+  position: relative;
+  height: 10%;
+
+  display: flex;
+
+  width: 97%;
+
+  background-color: #222;
+  color: #fff;
+
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.inner-box-w {
+  position: relative;
+  height: 700px;
+  padding: 20%;
+  gap: 40px;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  background-color: black;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.inner-box-2 {
+  position: relative;
+  height: 80%;
+
+  display: flex;
+  gap: 3%;
+
+  width: 97%;
+
+  background-color: black;
+  color: #fff;
+
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.inner-box-3 {
+  position: relative;
+  height: 90%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  width: 49%;
+
+  background-color: #222;
+  color: #fff;
+
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stack-data {
+  width: 100%; /* Updated this to ensure the container takes full width */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Added this to center align content horizontally */
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.card {
+  margin-top: 4%;
+  width: 100%;
+
+  color: #fff;
+
+  display: flex; /* Enables Flexbox for .card */
+  flex-direction: column; /* Stack the children vertically */
+
+  align-items: center; /* Center children horizontally */
+}
+.card-inner {
+  display: flex; /* Enables Flexbox for .card */
+  flex-direction: column;
+  /* Stack the children vertically */
+  font: "Inter";
+
+  align-items: center; /* Center children horizontally */
+}
+
+.button-sec {
+  width: 38%;
+  height: 40px;
+  align-items: center;
+  background: #6e42e5;
+  border-radius: 10px;
+  color: whitesmoke;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  gap: 10px;
+  justify-content: center;
+  line-height: 140%;
+  padding: 8px 16px;
+  float: right;
+
+  margin-left: 12px;
+  border: none;
+  cursor: pointer;
+}
