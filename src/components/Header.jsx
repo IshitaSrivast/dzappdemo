@@ -45,7 +45,7 @@ const Header = () => {
         console.log(output2);
         console.log(output3);
 
-        localStorage.setItem("apy", output[3]);
+        localStorage.setItem("apy", output2[3]);
         localStorage.setItem("staked", output[0]);
         localStorage.setItem("unclaimed", output[1]);
         localStorage.setItem("claimed", output[2]);
