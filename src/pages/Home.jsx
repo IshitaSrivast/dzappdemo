@@ -8,22 +8,40 @@ import { contractAddress, abi } from ".././contractDetails";
 import { ethers } from "ethers";
 
 const Home = () => {
-  const { account, contract } = useContext(EthereumContext);
+  //const { account, contract } = useContext(EthereumContext);
   const [inputValue, setInputValue] = useState("");
 
   const callContractFunction = async () => {
     //connectToMetaMask()
 
-    if (contract) {
+
       console.log("entered");
+
+    
+
+
 
       try {
         // Call a function on the contract
         const tokenAddress = "0x64DE202c43c0C2F666222E8bF327eA1f280d9948";
 
         const provider = new ethers.BrowserProvider(window.ethereum);
+
+        provider.listAccounts().then(accounts => {
+          if (accounts.length === 0) {
+            alert("Please connect Metamask first")
+            return;
+          }
+          
+        });
+
         const signer = await provider.getSigner();
         const amount = parseInt(inputValue);
+        const contract = new ethers.Contract(contractAddress, abi, signer);
+
+        
+
+
 
         const tokenContract = new ethers.Contract(
           tokenAddress,
@@ -48,7 +66,7 @@ const Home = () => {
         console.error("Error calling contract function:", error);
       }
       console.log("over here");
-    }
+    
     // else{
 
     //   if (window.ethereum) {
@@ -90,10 +108,15 @@ const Home = () => {
     // }
   };
   const unstakeTokens = async () => {
-    if (contract) {
+  
       // Replace with your staking contract address and ABI
 
       // Call the unstake function on the contract
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const amount = parseInt(inputValue);
+      const contract = new ethers.Contract(contractAddress, abi, signer);
+
       try {
         const tx = await contract.unstake(); // Assuming the function to unstake tokens is named 'unstake' and doesn’t require any parameters
         console.log("Unstaking initiated, transaction hash:", tx.hash);
@@ -102,16 +125,20 @@ const Home = () => {
       } catch (error) {
         console.error("Error occurred:", error);
       }
-    } else {
-      console.error("Please connect to MetaMask");
-    }
+     
+
   };
 
   const claimTokens = async () => {
-    if (contract) {
+    
       // Replace with your staking contract address and ABI
 
       // Call the unstake function on the contract
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const amount = parseInt(inputValue);
+      const contract = new ethers.Contract(contractAddress, abi, signer);
+
       try {
         const tx = await contract.claimRewards(); // Assuming the function to unstake tokens is named 'unstake' and doesn’t require any parameters
         console.log("Unstaking initiated, transaction hash:", tx.hash);
@@ -120,10 +147,11 @@ const Home = () => {
       } catch (error) {
         console.error("Error occurred:", error);
       }
-    } else {
-      console.error("Please connect to MetaMask");
+
     }
-  };
+    
+
+  
 
   return (
     <>
@@ -194,15 +222,15 @@ const Home = () => {
               <div className="inner-box-3">
                 <div className="card">
                   <div className="icon">
-                    <img style={{ borderRadius: "50%" }} src={mon} alt="icon" />
+                    <img style={{ "borderRadius": "50%" }} src={mon} alt="icon" />
                   </div>
 
                   <div className="card-inner">
                     <br />
-                    <div>My Funds</div>
+                    <div style = {{"fontSize":"24px"}}>My Funds</div>
                     <br />
-                    <br />
-                    <div>WMatic Staked</div>
+                    
+                    <div style = {{"color":"gray"}}>WMatic Staked</div>
                     <br />
                     <div>
                       {localStorage.getItem("staked")
@@ -213,6 +241,7 @@ const Home = () => {
                   <br />
                   <input
                     type="text"
+                    style = {{"backgroundColor":"black", "color":"white" , "borderRadius": "5px", "border":"none", "height": "27px", "width" :"35%"}}
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                   />
@@ -221,7 +250,7 @@ const Home = () => {
                   <br />
                   <br />
 
-                  <p>
+                  <p style = {{"color":"gray"}}>
                     Available:{" "}
                     {localStorage.getItem("balance")
                       ? localStorage.getItem("balance")
@@ -249,7 +278,7 @@ const Home = () => {
                     <div>My Rewards</div>
                     <br />
                     <br />
-                    <div>Unclaimed Rewards</div>
+                    <div style = {{"color":"gray"}}>Unclaimed Rewards</div>
                     <br />
                     <div>
                       {localStorage.getItem("unclaimed")
@@ -263,7 +292,7 @@ const Home = () => {
                   <br />
                   <br />
 
-                  <p>
+                  <p style = {{"color":"gray"}}>
                     Total Rewards Claimed:{" "}
                     {localStorage.getItem("claimed")
                       ? localStorage.getItem("claimed")
@@ -287,32 +316,4 @@ const Home = () => {
 
 export default Home;
 
-{
-  /* <div className="">
-       
-      <div className="card">
-        <h2>109.32%</h2>
-        <p>%APY</p>
-        <div className="icon"><img src="path_to_your_icon.png" alt="icon" /></div>
-        <h3>My Funds</h3>
-        <p>WMatic Staked</p>
-        <h4>0.0000 WMatic</h4>
-        <p>Available: 55.762366 WMatic</p>
-        <button>Stake</button>
-        <button>Unstake</button>
-      </div>
 
-      <div className="card">
-        <h2>4,486,272 WMatic</h2>
-        <p>Total WMatic Staked</p>
-        <h2>$328,000.00</h2>
-        <p>Staked Value</p>
-        <div className="icon"><img src="path_to_your_icon.png" alt="icon" /></div>
-        <h3>My Rewards</h3>
-        <p>Unclaimed Rewards</p>
-        <h4>0.0000 WMatic</h4>
-        <p>Total Rewards Claimed: 1.9803 WMatic 🚀</p>
-        <button>Claim Rewards</button>
-      </div>
-    </div> */
-}
