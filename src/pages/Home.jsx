@@ -14,144 +14,93 @@ const Home = () => {
   const callContractFunction = async () => {
     //connectToMetaMask()
 
+    console.log("entered");
 
-      console.log("entered");
+    try {
+      // Call a function on the contract
+      const tokenAddress = "0x64DE202c43c0C2F666222E8bF327eA1f280d9948";
 
-    
+      const provider = new ethers.BrowserProvider(window.ethereum);
 
+      provider.listAccounts().then((accounts) => {
+        if (accounts.length === 0) {
+          alert("Please connect Metamask first");
+          return;
+        }
+      });
 
+      const signer = await provider.getSigner();
+      const amount = parseInt(inputValue);
+      const contract = new ethers.Contract(contractAddress, abi, signer);
+
+      const tokenContract = new ethers.Contract(
+        tokenAddress,
+        [
+          "function approve(address spender, uint256 amount) external returns (bool)",
+        ],
+        signer
+      );
+      const approveTx = await tokenContract.approve(contractAddress, amount);
+      await approveTx.wait();
+      console.log(approveTx);
 
       try {
-        // Call a function on the contract
-        const tokenAddress = "0x64DE202c43c0C2F666222E8bF327eA1f280d9948";
-
-        const provider = new ethers.BrowserProvider(window.ethereum);
-
-        provider.listAccounts().then(accounts => {
-          if (accounts.length === 0) {
-            alert("Please connect Metamask first")
-            return;
-          }
-          
-        });
-
-        const signer = await provider.getSigner();
-        const amount = parseInt(inputValue);
-        const contract = new ethers.Contract(contractAddress, abi, signer);
-
-        
-
-
-
-        const tokenContract = new ethers.Contract(
-          tokenAddress,
-          [
-            "function approve(address spender, uint256 amount) external returns (bool)",
-          ],
-          signer
-        );
-        const approveTx = await tokenContract.approve(contractAddress, amount);
-        await approveTx.wait();
-        console.log(approveTx);
-
-        try {
-          const tx = await contract.stake(amount); // Assuming the function to stake tokens is named 'stake' and takes the amount as a parameter
-          console.log("Staking initiated, transaction hash:", tx.hash);
-          await tx.wait();
-          console.log("Staking confirmed");
-        } catch (error) {
-          console.error("Error occurred:", error);
-        }
+        // Assuming 'amount' is already defined and correctly formatted
+        const emptyPermit = "0x"; // An empty bytes array
+        const tx = await contract.stake(amount, emptyPermit);
+        console.log("Staking initiated, transaction hash:", tx.hash);
+        await tx.wait();
+        console.log("Staking confirmed");
       } catch (error) {
-        console.error("Error calling contract function:", error);
+        console.error("Error occurred:", error);
       }
-      console.log("over here");
-    
-    // else{
+    } catch (error) {
+      console.error("Error calling contract function:", error);
+    }
+    console.log("over here");
 
-    //   if (window.ethereum) {
-    //     try {
-
-    //       const provider = new ethers.BrowserProvider(window.ethereum);
-
-    //       const acc = await provider.listAccounts();
-
-    //       const signer = await provider.getSigner();
-    //       console.log(signer);
-    //       console.log(abi);
-    //       console.log(contractAddress)
-    //       // Create a contract instance
-    //       const contrac = new ethers.Contract(contractAddress, abi, signer);
-    //       console.log(contrac)
-
-    //       try {
-    //         // Call a function on the contract
-    //         console.log(contrac)
-    //         console.log(account)
-    //         const result = await contrac.getStakerInfo(acc[0]);
-
-    //        // const result = await contract.functionName(); // Replace with your contract's function name
-    //         console.log("Function Result:", result);
-    //       } catch (error) {
-    //         console.error("Error calling contract function:", error);
-    //       }
-    //       console.log("over here")
-
-    //       alert("connected to the metamask");
-    //     } catch (error) {
-    //       console.error("Error connecting to MetaMask:", error);
-    //     }
-    //   } else {
-    //     console.error("MetaMask not found");
-    //   }
-
-    // }
   };
   const unstakeTokens = async () => {
+    // Initialize provider and signer
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = provider.getSigner();
   
-      // Replace with your staking contract address and ABI
-
+    // Initialize contract
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+  
+    try {
       // Call the unstake function on the contract
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const amount = parseInt(inputValue);
-      const contract = new ethers.Contract(contractAddress, abi, signer);
-
-      try {
-        const tx = await contract.unstake(); // Assuming the function to unstake tokens is named 'unstake' and doesn’t require any parameters
-        console.log("Unstaking initiated, transaction hash:", tx.hash);
-        await tx.wait();
-        console.log("Unstaking confirmed");
-      } catch (error) {
-        console.error("Error occurred:", error);
-      }
-     
-
+      const tx = await contract.unstake();
+      console.log("Unstaking initiated, transaction hash:", tx.hash);
+  
+      // Wait for transaction confirmation
+      const receipt = await tx.wait();
+      console.log("Unstaking confirmed, status:", receipt.status);
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
   };
+  
+  
 
   const claimTokens = async () => {
-    
-      // Replace with your staking contract address and ABI
+    // Replace with your staking contract address and ABI
 
-      // Call the unstake function on the contract
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
-      const amount = parseInt(inputValue);
-      const contract = new ethers.Contract(contractAddress, abi, signer);
+    // Call the unstake function on the contract
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const amount = parseInt(inputValue);
+    const contract = new ethers.Contract(contractAddress, abi, signer);
 
-      try {
-        const tx = await contract.claimRewards(); // Assuming the function to unstake tokens is named 'unstake' and doesn’t require any parameters
-        console.log("Unstaking initiated, transaction hash:", tx.hash);
-        await tx.wait();
-        console.log("Unstaking confirmed");
-      } catch (error) {
-        console.error("Error occurred:", error);
-      }
-
+    try {
+      const tx = await contract.claimRewards(); // Assuming the function to unstake tokens is named 'unstake' and doesn’t require any parameters
+      console.log("Unstaking initiated, transaction hash:", tx.hash);
+      await tx.wait();
+      console.log("Unstaking confirmed");
+    } catch (error) {
+      console.error("Error occurred:", error);
     }
-    
-
-  
+  };
 
   return (
     <>
@@ -222,15 +171,15 @@ const Home = () => {
               <div className="inner-box-3">
                 <div className="card">
                   <div className="icon">
-                    <img style={{ "borderRadius": "50%" }} src={mon} alt="icon" />
+                    <img style={{ borderRadius: "50%" }} src={mon} alt="icon" />
                   </div>
 
                   <div className="card-inner">
                     <br />
-                    <div style = {{"fontSize":"24px"}}>My Funds</div>
+                    <div style={{ fontSize: "24px" }}>My Funds</div>
                     <br />
-                    
-                    <div style = {{"color":"gray"}}>WMatic Staked</div>
+
+                    <div style={{ color: "gray" }}>WMatic Staked</div>
                     <br />
                     <div>
                       {localStorage.getItem("staked")
@@ -241,7 +190,14 @@ const Home = () => {
                   <br />
                   <input
                     type="text"
-                    style = {{"backgroundColor":"black", "color":"white" , "borderRadius": "5px", "border":"none", "height": "27px", "width" :"35%"}}
+                    style={{
+                      backgroundColor: "black",
+                      color: "white",
+                      borderRadius: "5px",
+                      border: "none",
+                      height: "27px",
+                      width: "35%",
+                    }}
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                   />
@@ -250,7 +206,7 @@ const Home = () => {
                   <br />
                   <br />
 
-                  <p style = {{"color":"gray"}}>
+                  <p style={{ color: "gray" }}>
                     Available:{" "}
                     {localStorage.getItem("balance")
                       ? localStorage.getItem("balance")
@@ -278,7 +234,7 @@ const Home = () => {
                     <div>My Rewards</div>
                     <br />
                     <br />
-                    <div style = {{"color":"gray"}}>Unclaimed Rewards</div>
+                    <div style={{ color: "gray" }}>Unclaimed Rewards</div>
                     <br />
                     <div>
                       {localStorage.getItem("unclaimed")
@@ -292,7 +248,7 @@ const Home = () => {
                   <br />
                   <br />
 
-                  <p style = {{"color":"gray"}}>
+                  <p style={{ color: "gray" }}>
                     Total Rewards Claimed:{" "}
                     {localStorage.getItem("claimed")
                       ? localStorage.getItem("claimed")
@@ -315,5 +271,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
